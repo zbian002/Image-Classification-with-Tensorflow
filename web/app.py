@@ -28,7 +28,7 @@ class Register(Resource):
         #Get posted data by the user
         postedData = request.get_json()
         username = postedData["username"]
-        password = postedData["password"] 
+        password = postedData["password"]
 
         if UserExist(username):
             retJson = {
