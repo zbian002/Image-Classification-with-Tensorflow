@@ -15,35 +15,37 @@ client = MongoClient("mongodb://db:27017")
 db = client.IRG
 users = db["Users"]
 
-#The function check whether username is in the database
+
+# The function check whether username is in the database
 def UserExist(username):
-    if users.find({"Username":username}).count() == 0:
+    if users.find({"Username": username}).count() == 0:
         return False
     else:
         return True
 
-#The class is used to register user information
+
+# The class is used to register user information
 class Register(Resource):
     def post(self):
-        #Get posted data by the user
+        # Get posted data by the user
         postedData = request.get_json()
         username = postedData["username"]
         password = postedData["password"]
 
         if UserExist(username):
             retJson = {
-                'status':301,
+                'status': 301,
                 'msg': 'Invalid Username'
             }
             return jsonify(retJson)
 
         hashed_pw = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
 
-        #Store username and pw into the database
+        # Store username and pw into the database
         users.insert({
             "Username": username,
             "Password": hashed_pw,
-            "Tokens":10
+            "Tokens": 10
         })
 
         retJson = {
@@ -52,13 +54,14 @@ class Register(Resource):
         }
         return jsonify(retJson)
 
-#The function is used to verify the user password
+
+# The function is used to verify the user password
 def verifyPw(username, password):
     if not UserExist(username):
         return False
 
     hashed_pw = users.find({
-        "Username":username
+        "Username": username
     })[0]["Password"]
 
     if bcrypt.hashpw(password.encode('utf8'), hashed_pw) == hashed_pw:
@@ -66,7 +69,8 @@ def verifyPw(username, password):
     else:
         return False
 
-#The function return the response
+
+# The function return the response
 def generateReturnDictionary(status, msg):
     retJson = {
         "status": status,
@@ -74,7 +78,8 @@ def generateReturnDictionary(status, msg):
     }
     return retJson
 
-#The function verify user credentials and return response
+
+# The function verify user credentials and return response
 def verifyCredentials(username, password):
     if not UserExist(username):
         return generateReturnDictionary(301, "Invalid Username"), True
@@ -86,7 +91,8 @@ def verifyCredentials(username, password):
 
     return None, False
 
-#This class use the tensorflow image recognition api to classify images
+
+# This class use the tensorflow image recognition api to classify images
 class Classify(Resource):
     def post(self):
         postedData = request.get_json()
@@ -100,34 +106,36 @@ class Classify(Resource):
             return jsonify(retJson)
 
         tokens = users.find({
-            "Username":username
+            "Username": username
         })[0]["Tokens"]
 
-        if tokens<=0:
+        if tokens <= 0:
             return jsonify(generateReturnDictionary(303, "Not Enough Tokens"))
 
         r = requests.get(url)
         retJson = {}
         with open('temp.jpg', 'wb') as f:
             f.write(r.content)
-            proc = subprocess.Popen('python classify_image.py --model_dir=. --image_file=./temp.jpg', stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+            proc = subprocess.Popen(
+                'python classify_image.py --model_dir=. --image_file=./temp.jpg',
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
             ret = proc.communicate()[0]
             proc.wait()
             with open("text.txt") as f:
                 retJson = json.load(f)
 
-
         users.update({
             "Username": username
-        },{
-            "$set":{
+        }, {
+            "$set": {
                 "Tokens": tokens-1
             }
         })
 
         return retJson
 
-#The class refill the resource
+
+# The class refill the resource
 class Refill(Resource):
     def post(self):
         postedData = request.get_json()
@@ -145,16 +153,17 @@ class Refill(Resource):
 
         users.update({
             "Username": username
-        },{
-            "$set":{
+        }, {
+            "$set": {
                 "Tokens": amount
             }
         })
         return jsonify(generateReturnDictionary(200, "Refilled"))
 
+
 api.add_resource(Register, '/register')
 api.add_resource(Classify, '/classify')
 api.add_resource(Refill, '/refill')
 
-if __name__=="__main__":
+if __name__ == "__main__":
     app.run(host='0.0.0.0')
