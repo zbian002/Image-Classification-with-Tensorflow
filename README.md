@@ -1,6 +1,6 @@
 # Image-Classification-with-Tensorflow
 
-One Paragraph of project description goes here
+Design and implement a RESTful API via the Flask framework, in the API, we do image recognition with tensorflow and we also use mongodb to store the user information.
 
 ## Getting Started
 
