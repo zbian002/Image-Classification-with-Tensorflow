@@ -113,6 +113,7 @@ We can test the image for 10 times as we create a variable called `token` and se
 ![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/6.png)
 
 We should get the following results means we successfull refilled:
+
 ![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/7.png)
 
 ## Authors
@@ -121,5 +122,5 @@ We should get the following results means we successfull refilled:
 
 ## License
 
-This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details
 
