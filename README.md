@@ -84,58 +84,42 @@ Clone this repository to a directory of your choice.
 ##### Step 3: Start MongoDB service:
 - `sudo systemctl start mongod.service`
 ## Running the tests
+
 Go to the folder where you clone the project and run the following command:
-- `sudo docker-compose build`, this could take a while, once it said 
+`sudo docker-compose build`, this could take a while, once it said 
 *successfully built*, and then we run `sudo docker-compose up`, to start the server.
+
 And then we open postman, once it opened, we choose to type in the url, which is `localhost:5000`, and since we use POST data as input, therefore, we choose `POST`, and in the body tag, we choose *raw* and `JSON(application/json)`, after all is set, it should looks like this:
 ![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/1.png)
-### Break down into end to end tests
 
-Explain what these tests test and why
+In app.py, we made three endpoints, first, we need to go to `localhost:5000/register` to register the user information, we put our username and password in the format of JSON and click the send button like this:
+![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/2.png)
 
-```
-Give an example
-```
+If we did it right, we will get the feedback as following:
+![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/3.png)
 
-### And coding style tests
+Then we can go to `localhost:5000/classify` to do the image recognition, and we type in the username and password we just registered in the previous step, and a url specifies the location of the picture(the picture has to be .jpg format), and click send button, for example we choose a zebra photo as follows:
+![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/hero_zebra_animals.jpg)
 
-Explain what these tests test and why
+And we do as follows:
+![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/4.png)
 
-```
-Give an example
-```
+And then we shoud get the following results:
+![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/5.png)
 
-## Deployment
+In the results, it gives five possible answers, and the possibilities written behind, for example, from the result, we can see the api said the image is a zebra with possibility of more than 0.954.
 
-Add additional notes about how to deploy this on a live system
+We can test the image for 10 times as we create a variable called `token` and set the value to be 10, once we used them all, we can go to `localhost:5000/refill` to refill, we need to type in the username we just registered, and admin_pw(which is abc123), and the amount of tests we want it to refill in json format as follows:
+![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/6.png)
 
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We should get the following results means we successfull refilled:
+![image](https://github.com/zbian002/Image-Classification-with-Tensorflow/blob/master/images/7.png)
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Zhen Bian** - *Initial work* - [Image-Classification-with-Tensorflow](https://github.com/zbian002/Image-Classification-with-Tensorflow)
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+This project is licensed under the Apache License 2.0 - see the [LICENSE.md](LICENSE.md) file for details
 
